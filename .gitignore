@@ -1,0 +1,6 @@
+/.eggs
+/.pytest_cache
+/iggy_python.egg-info
+/venv
+/dist
+/build
