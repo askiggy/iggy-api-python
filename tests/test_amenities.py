@@ -1,4 +1,4 @@
-from iggypythonlib import api
+import iggyapi.api as api
 import requests_mock
 
 curr_api = api.IggyAPI("test_string")
