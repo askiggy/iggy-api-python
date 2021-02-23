@@ -6,7 +6,6 @@ from shapely.geometry import Point
 from typing import List
 
 from iggyapi.api import IggyAPI
-from iggyapi import iggyutils
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -176,21 +175,21 @@ class IggyAmenitiesScoreFeature(IggyFeature):
             logging.error('Must specify exactly one of `within_miles|minutes_driving|walking|biking')
             raise ValueError
         if within_minutes_driving:
-            name_method = 'driving'
-            name_dist = within_minutes_driving
+            name_method = 'minutes_driving'
+            dist = within_minutes_driving
         elif within_minutes_biking:
-            name_method = 'biking'
-            name_dist = within_minutes_biking
+            name_method = 'minutes_biking'
+            dist = within_minutes_biking
         elif within_minutes_walking:
-            name_method = 'walking'
-            name_dist = within_minutes_walking
+            name_method = 'minutes_walking'
+            dist = within_minutes_walking
         else:
             name_method = 'miles'
-            name_dist = within_miles
-        self.name = f'amenities_{name_method}_{name_dist}'
+            dist = within_miles
+        self.name = f'amenities_{name_method}_{dist}'
         self.endpoint = 'amenities_score'
         self.params = {
-            name_method: name_dist
+            f'within_{name_method}': dist
         }
         self.calc = FeatureCalc(result_keys=['score'],
                                 calc_method='value')
