@@ -54,18 +54,18 @@ body = {
 def test_get_poi():
     with requests_mock.Mocker() as m:
         m.get("https://api.askiggy.com/v1/points_of_interest?latitude=44.976469&longitude=-93.271205&labels=warehouses&within_minutes_driving=5", json=test_response)
-        assert curr_api.poi(poi_object) == test_response
+        assert curr_api.points_of_interest(poi_object) == test_response
 
 
 def test_poi_options():
     with requests_mock.Mocker() as m:
         m.get("https://api.askiggy.com/v1/points_of_interest_options",
               json=poi_options_test_response)
-        assert curr_api.poi_options() == poi_options_test_response
+        assert curr_api.points_of_interest_options() == poi_options_test_response
 
 
 def test_summary_lookup():
     with requests_mock.Mocker() as m:
         m.post("https://api.askiggy.com/v1/points_of_interest",
                json=test_response)
-        assert curr_api.poi(poi_post_object) == test_response
+        assert curr_api.points_of_interest(poi_post_object) == test_response
