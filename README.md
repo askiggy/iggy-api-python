@@ -4,13 +4,13 @@ A Python wrapper for accessing the Iggy API
 
 ## Table of Contents
 
--   [Installation](#installation)
--   [Usage](#usage)
--   [Contributing](#contributing)
--   [Support & Feedback](#support-feedback)
--   [What is Iggy](#what-is-iggy)
--   [Licensing](#licensing)
--   [Publishing](#licensing)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Support & Feedback](#support-feedback)
+- [What is Iggy](#what-is-iggy)
+- [Licensing](#licensing)
+- [Publishing](#licensing)
 
 # Installation
 
@@ -33,14 +33,12 @@ myapi = api.IggyAPI("<your_token_here>")
 This library currently supports all public endpoints:
 
 ```python
-
-
 options = {
     "method": "GET",
     "params": {
         "latitude": 44.976469,
         "longitude": -93.271205,
-        # Other params here
+        # Other params here. An extensive list can be found at our documentation
     },
 };
 
@@ -66,6 +64,18 @@ myapi.clusters(options)
 myapi.points_of_interest_options()
 ```
 
+For certain endpoints (specifically /isochrone and /clusters), the results come back as a GeoDataFrame by default (for ease of access). If you would instead like the raw response, add the key-value pair` "raw_response": False` into the options dictionary that you're using to query.
+
+## Mapping your isochrone and clusters endpoints
+
+If you want to also plot your function, we provided a plot function after calling the api on isochrone or clusters. Simply call
+
+```python
+myapi.plot("isochrone")
+# or
+myapi.plot("clusters")
+```
+
 # Enriching data frames with `IggyFeature` and `IggyFeatureSet`
 
 The `IggyFeature` base class and its derived classes make it easy to add new columns containing Iggy-enriched location data to your Pandas or GeoPandas data frames.
@@ -87,11 +97,11 @@ df = pd.DataFrame(
 
 # define IggyFeatures and combine them within an IggyFeatureSet
 amenities_feature = iggyfeature.IggyAmenitiesScoreFeature(
-    myapi, 
+    myapi,
     within_minutes_driving=10
 )
 nearest_grocery_feature = iggyfeature.IggyPOIFeature(
-    myapi, 
+    myapi,
     calc_method='min',
     label='grocery_stores',
     within_minutes_driving=10

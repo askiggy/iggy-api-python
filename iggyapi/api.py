@@ -100,33 +100,3 @@ class IggyAPI():
 
     def points_of_interest_options(self):
         return self.enrich("points_of_interest_options", {"method": "GET", "params": None})
-
-
-api = IggyAPI("03886df9fb8f6306e2065fdc98f2080")
-
-
-cluster_object = {
-    "method": "GET",
-    "params": {
-        "latitude": 44.976469,
-        "longitude": -93.271205,
-        "category": "restaurants",
-        "within_miles": 3,
-    },
-}
-
-print(api.clusters(cluster_object))
-
-isochrone_object = {
-    "method": "GET",
-    "params": {
-        "lat": 44.976469,
-        "lng": -93.271205,
-        "time_limit_minutes": 1,
-        "mode": "car",
-    },
-}
-
-print(api.isochrone(isochrone_object))
-# api.plot("clusters")
-api.plot("isochrone")
