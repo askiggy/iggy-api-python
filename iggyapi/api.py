@@ -3,9 +3,20 @@ import json
 from typing import Dict
 import shapely.geometry as sg
 import geopandas as gpd
+import matplotlib.pyplot as plt
+import contextily as ctx
 
 
 class IggyAPI():
+    """Basic Implementation of the API in python
+
+    Parameters
+    ----------
+    api_token : str
+        A string representing the token of the Iggy User
+
+    """
+
     def __init__(self, api_token: str):
         self.api_token = api_token
         self.base_url = "https://api.askiggy.com/v1/"
@@ -14,40 +25,40 @@ class IggyAPI():
             "Content-Type": "application/json",
             "X-Iggy-Token": self.api_token,
         }
+        self.last_clusters = None
+        self.last_isochrone = None
 
-    def _get_coordinates(self, return_dict: Dict):
-        return return_dict.get("geometry").get("coordinates")[0]
-
-    def _convert_ischrone_to_gdf_res(self, response: Dict):
+    def _convert_clusters_to_gdf_res(self, response: Dict):
         num_clusters = len(response["clusters"])
 
-        names = [None] * num_clusters
-        d2 = [None] * num_clusters
-        gdf_l = [None] * num_clusters
-        cluster = [None] * num_clusters
-        line_dist = [None] * num_clusters
-        for i in range(num_clusters):
-            d2[i] = response['clusters'][i]['geojson']
-            ['geometry']['coordinates'][0]
-            names[i] = response['clusters'][i]['summary']['place_names']
-            line_dist[i] = response["clusters"][i]["geojson"]
-            ["properties"]["straight_line_distance_miles"]
+        names = [c["summary"]["place_names"] for c in response["clusters"]]
+        geoms = [c["geojson"] for c in response["clusters"]]
+        gdf = gpd.GeoDataFrame.from_features(geoms)
+        gdf["names"] = names
+        gdf.crs = {"init": "epsg:4326"}
+        self.last_clusters = gdf
+        return gdf
 
-            cluster[i] = sg.Polygon(d2[i])
-            gdf = gpd.GeoSeries([cluster[i]])
-            # give it a crs (iggy data is 4326, then update it for basemap to 3857 (standard here))
-            gdf.crs = {'init': 'epsg:4326'}
-            gdf = gdf.to_crs(epsg=3857)
-            gdf_l[i] = (gdf)
+    def _create_isochrone_gdf(self, response: Dict):
+        gdf = gpd.GeoDataFrame.from_features([response])
+        gdf.crs = {"init": "epsg:4326"}
+        self.last_isochrone = gdf
+        return gdf
 
-        polys_gdf = gpd.GeoDataFrame(gdf_l, geometry=0)
-        polys_gdf = polys_gdf.rename(
-            columns={0: "polygon"}).set_geometry("polygon")
+    def plot(self, endpoint):
+        if endpoint == "isochrone":
+            gdf = self.last_isochrone
+        elif endpoint == "clusters":
+            gdf = self.last_clusters
+        else:
+            print("Endpoint not yet supported")
+            return
 
-        polys_gdf['names'] = names
-        polys_gdf["straight_line_distance"] = line_dist
-
-        return polys_gdf
+        ax = gdf.plot(edgecolor="k", alpha=0.5)
+        ctx.add_basemap(
+            ax, zoom=16, source=ctx.providers.Stamen.TonerLite, crs=gdf.crs)
+        ax.set_axis_off()
+        plt.show()
 
     def enrich(self, endpoint: str, options: Dict, body: Dict = {}) -> Dict:
         method = options.get("method") or "GET"
@@ -67,8 +78,12 @@ class IggyAPI():
         return self.enrich("lookup", options)
 
     def isochrone(self, options: Dict) -> sg.Polygon:
-        # Should there be an option to get the entire response
-        return sg.Polygon(self._get_coordinates(self.enrich("isochrone", options)))
+        # Defaults to False seems to be a better option
+        raw_response = options.get("raw", False)
+        if raw_response:
+            return self.enrich("isochrone", options)
+        else:
+            return self._create_isochrone_gdf(self.enrich("isochrone", options))
 
     def points_of_interest(self, options: Dict, body: Dict = {}) -> Dict:
         return self.enrich("points_of_interest", options, body)
@@ -77,7 +92,41 @@ class IggyAPI():
         return self.enrich("amenities_score", options)
 
     def clusters(self, options: Dict):
-        return self._convert_ischrone_to_gdf_res(self.enrich("clusters", options))
+        raw_response = options.get("raw", False)
+        if raw_response:
+            return self.enrich("clusters", options)
+        else:
+            return self._convert_clusters_to_gdf_res(self.enrich("clusters", options))
 
     def points_of_interest_options(self):
         return self.enrich("points_of_interest_options", {"method": "GET", "params": None})
+
+
+api = IggyAPI("03886df9fb8f6306e2065fdc98f2080")
+
+
+cluster_object = {
+    "method": "GET",
+    "params": {
+        "latitude": 44.976469,
+        "longitude": -93.271205,
+        "category": "restaurants",
+        "within_miles": 3,
+    },
+}
+
+print(api.clusters(cluster_object))
+
+isochrone_object = {
+    "method": "GET",
+    "params": {
+        "lat": 44.976469,
+        "lng": -93.271205,
+        "time_limit_minutes": 1,
+        "mode": "car",
+    },
+}
+
+print(api.isochrone(isochrone_object))
+# api.plot("clusters")
+api.plot("isochrone")
