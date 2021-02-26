@@ -54,4 +54,10 @@ response = {
 def test_isochrone():
     with requests_mock.Mocker() as m:
         m.get("https://api.askiggy.com/v1/isochrone?lat=44.976469&lng=-93.271205&time_limit_minutes=1&mode=car", json=response)
-        assert curr_api.isochrone(isochrone_object) == response
+        assert curr_api.isochrone(isochrone_object, raw_response=True) == response
+
+def test_isochrone_gdf():
+    with requests_mock.Mocker() as m:
+        m.get("https://api.askiggy.com/v1/isochrone?lat=44.976469&lng=-93.271205&time_limit_minutes=1&mode=car", json=response)
+        gdf = curr_api.isochrone(isochrone_object)
+        assert gdf.shape[0] == 1

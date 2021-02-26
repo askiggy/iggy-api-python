@@ -275,7 +275,6 @@ class IggyAPI():
 
         :return: gpd.GeoDataFrame or dict
         """
-        raw_response = options.get("raw", False)
         if raw_response:
             return self.enrich("clusters", options)
         else:
