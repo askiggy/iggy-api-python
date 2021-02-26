@@ -1,6 +1,5 @@
 setuptools~=47.1.0
 requests~=2.25.1
-PyYAML~=5.4.1
 Shapely~=1.7.1
 pytest~=4.4.1
 geopandas~=0.8.2
