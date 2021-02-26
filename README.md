@@ -57,7 +57,7 @@ myapi.isochrone(options)
 #  Amenities
 myapi.amenities(options)
 
-#  Cluters
+#  Clusters
 myapi.clusters(options)
 
 # Points of Interest Options
@@ -150,7 +150,7 @@ Iggy is the world's first location enrichment API that makes it easy to integrat
 
 # Publishing
 
-First, ensure that all tests passed by running ` python setup.py pytest`. From there, run `python setup.py bdist_wheel` to generate an installable .whl file. From there, run twine upload dist/\* to upload the package. For a more robust documentation, see the official [packaging page](https://packaging.python.org/tutorials/packaging-projects/).
+First, ensure that all tests passed by running ` python setup.py pytest`. From there, run `python setup.py bdist_wheel` to generate an installable .whl file. From there, run `twine upload dist/\*` to upload the package. For a more robust documentation, see the official [packaging page](https://packaging.python.org/tutorials/packaging-projects/).
 
 # Licensing
 
