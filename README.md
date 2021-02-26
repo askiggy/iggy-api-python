@@ -64,7 +64,7 @@ myapi.clusters(options)
 myapi.points_of_interest_options()
 ```
 
-For certain endpoints (specifically /isochrone and /clusters), the results come back as a GeoDataFrame by default (for ease of access). If you would instead like the raw response, add the parameter `raw_response=False`.
+For certain endpoints (specifically /isochrone and /clusters), the results come back as a GeoDataFrame by default (for ease of access). If you would instead like the raw response, add the parameter `raw_response=True`.
 
 ## Mapping your isochrone and clusters endpoints
 
