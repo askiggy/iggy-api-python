@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="iggyapi",
     packages=find_packages(include=["iggyapi"]),
-    version="0.1.2",
+    version="0.1.3",
     description="Python Library for ask iggy API functionality",
     author="ask iggy",
     author_email="ivan@askiggy.com",
@@ -21,5 +21,6 @@ setup(
         "Operating System :: OS Independent",
     ],
     test_suite="tests",
-    install_requires=[],
+    install_requires=['requests', 'geopandas', 'matplotlib',
+                      'Shapely', 'pandas', 'contextily'],
 )

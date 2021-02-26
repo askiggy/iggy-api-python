@@ -1,7 +1,9 @@
 setuptools~=47.1.0
 requests~=2.25.1
-PyYAML~=5.4.1
 Shapely~=1.7.1
 pytest~=4.4.1
 geopandas~=0.8.2
 pandas~=1.2.2
+matplotlib~=3.3.4 
+descartes~=1.1.0
+contextily~=1.1.0
