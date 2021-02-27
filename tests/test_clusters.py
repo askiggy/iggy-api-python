@@ -186,4 +186,12 @@ def test_cluster_endpoint():
     with requests_mock.Mocker() as m:
         m.get("https://api.askiggy.com/v1/clusters?latitude=44.976469&longitude=-93.271205&category=restaurants&within_miles=3",
               json=cluster_response)
-        assert curr_api.clusters(cluster_object) == cluster_response
+        assert curr_api.clusters(cluster_object, raw_response=True) == cluster_response
+
+def test_cluster_gdf():
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://api.askiggy.com/v1/clusters?latitude=44.976469&longitude=-93.271205&category=restaurants&within_miles=3",
+            json=cluster_response)
+        gdf = curr_api.clusters(cluster_object)
+        assert gdf.shape[0] == len(cluster_response['clusters'])
