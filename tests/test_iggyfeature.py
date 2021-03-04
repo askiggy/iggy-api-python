@@ -19,6 +19,9 @@ test_lookup_response = {
     "population_density_per_km": {
         "value": 1601,
     },
+    "air_quality": {
+        "value": 35
+    }
 }
 
 test_poi_response = {
@@ -75,9 +78,18 @@ def test_iggylookup_popdensity():
     label = "population_density_per_km"
     curr_api = api.IggyAPI("test_string")
     curr_api.enrich = MagicMock(return_value=test_lookup_response)
-    f = IggyLookupFeature(curr_api, "value", label=label)
+    f = IggyLookupFeature(curr_api, label=label, calc_method="value")
     result = f.calculate(test_longitude, test_latitude)
     assert result == 1601
+
+
+def test_iggylookup_defaultcalc():
+    label = "air_quality"
+    curr_api = api.IggyAPI("test_string")
+    curr_api.enrich = MagicMock(return_value=test_lookup_response)
+    f = IggyLookupFeature(curr_api, label=label)
+    result = f.calculate(test_longitude, test_latitude)
+    assert result == 35
 
 
 def test_iggypoi_bars():
@@ -123,7 +135,8 @@ def test_iggyfeatureset():
                         within_minutes_walking=5)
     local_api_1.enrich = MagicMock(return_value=test_poi_response)
     local_api_2 = api.IggyAPI("test_token")
-    f2 = IggyLookupFeature(local_api_2, "value", label="population_density_per_km")
+    f2 = IggyLookupFeature(local_api_2, label="population_density_per_km",
+                           calc_method="value")
     local_api_2.enrich = MagicMock(return_value=test_lookup_response)
 
     fs = IggyFeatureSet([f1, f2])
