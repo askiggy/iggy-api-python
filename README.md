@@ -1,4 +1,4 @@
-# @ask-iggy/iggypythonlib
+# Iggyapi
 
 A Python wrapper for accessing the Iggy API
 
@@ -17,7 +17,7 @@ A Python wrapper for accessing the Iggy API
 Using `pip`
 
 ```bash
-pip install iggy-python
+pip install iggyapi
 ```
 
 # Basic API Usage

@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="iggyapi",
     packages=find_packages(include=["iggyapi"]),
-    version="0.1.3",
+    version="0.1.4",
     description="Python Library for ask iggy API functionality",
     author="ask iggy",
     author_email="ivan@askiggy.com",
