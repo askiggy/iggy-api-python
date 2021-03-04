@@ -116,8 +116,6 @@ class IggyLookupFeature(IggyFeature):
             'labels': label
         }
         result_key = 'value'
-        if label == 'air_quality':
-            result_key = 'air_quality_index'
         self.calc = FeatureCalc(result_keys=[label, result_key],
                                 calc_method=calc_method)
 
