@@ -105,7 +105,7 @@ class IggyFeature():
 
 
 class IggyLookupFeature(IggyFeature):
-    def __init__(self, api: IggyAPI, calc_method: str, label: str):
+    def __init__(self, api: IggyAPI, label: str, calc_method: str = 'value'):
         super().__init__(api)
         if len(label.split(',')) > 1:
             logging.error('IggyLookupFeature supports only a single label')
