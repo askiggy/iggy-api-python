@@ -227,5 +227,5 @@ class IggyFeatureSet():
             points = [Point(lng, lat) for lng, lat in zip(df[longitude_col], df[latitude_col])]
             points = gpd.GeoSeries(points)
         for feature in self.features:
-            enriched_df[feature.name] = points.apply(lambda p: feature.calculate(p.x, p.y))
+            enriched_df[feature.name] = list(points.apply(lambda p: feature.calculate(p.x, p.y)))
         return enriched_df
