@@ -4,5 +4,6 @@
 /venv
 /dist
 /build
-*.pyc
+__pycache__/
+*.py[cod]
 
