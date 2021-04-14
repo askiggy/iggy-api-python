@@ -1,4 +1,4 @@
-# Iggyapi
+# Iggy API Python Library
 
 A Python wrapper for accessing the Iggy API
 

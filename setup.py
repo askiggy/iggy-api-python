@@ -8,8 +8,9 @@ setup(
     packages=find_packages(include=["iggyapi"]),
     version="0.1.4",
     description="Python Library for ask iggy API functionality",
-    author="ask iggy",
-    author_email="ivan@askiggy.com",
+    url='https://github.com/askiggy/iggy-api-python',
+    author="Ask Iggy, Inc.",
+    author_email="support@askiggy.com",
     license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -23,4 +24,5 @@ setup(
     test_suite="tests",
     install_requires=['requests', 'geopandas', 'matplotlib',
                       'Shapely', 'pandas', 'contextily'],
+    platforms='any'
 )
